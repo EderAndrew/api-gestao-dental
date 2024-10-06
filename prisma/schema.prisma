@@ -1,0 +1,186 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model addresses {
+  id           Int       @id @default(autoincrement())
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  cep          String
+  userId       Int?
+  officeId     String?
+  patientId    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+  offices      offices?  @relation(fields: [officeId], references: [identity])
+  patients     patients? @relation(fields: [patientId], references: [identity])
+  users        users?    @relation(fields: [userId], references: [id])
+}
+
+model anamneses {
+  id                     Int      @id @default(autoincrement())
+  reason                 String
+  discomfort_mouth       String
+  high_pressure          String
+  control_pressure       String
+  oral_hygiene           String
+  grind_teeth            String
+  allergy                String
+  what_allergy           String
+  drink_smoke            String
+  frequency              String
+  bleeding               String
+  when_bleeding          String
+  sensitivity            String
+  prothesis              String
+  prothesis_type         String
+  pregnant_breastfeeding String?
+  pregnant_time          String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime
+  patientId              Int
+  patients               patients @relation(fields: [patientId], references: [id])
+}
+
+model budgets {
+  id               Int      @id @default(autoincrement())
+  treatment_type   String
+  treatment_date   String
+  procedure_type   String
+  agreement        String
+  total            Int
+  entry            Int?
+  pay_installments Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime
+  patientId        Int
+  patients         patients @relation(fields: [patientId], references: [id])
+  teeths           teeths[]
+}
+
+model offices {
+  id        Int         @id @default(autoincrement())
+  identity  String?     @unique
+  corporate String
+  name      String
+  tel       String
+  cnpj      String      @unique
+  status    Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  addresses addresses[]
+  patients  patients[]
+  users     users[]
+}
+
+model officesPayment {
+  id Int @id @default(autoincrement())
+}
+
+model patients {
+  id                     Int         @id @default(autoincrement())
+  identity               String?     @unique
+  name                   String
+  email                  String?
+  cpf                    String
+  rg                     String
+  birth_date             String
+  tel                    String
+  career                 String
+  gender                 String
+  age                    Int
+  responsible_name       String?
+  responsible_birth_date String?
+  contact_name           String?
+  contact_tel            String?
+  agreement              String
+  agreement_card         String
+  holder_name            String?
+  cpf_holder             String?
+  status                 Boolean     @default(true)
+  role                   Role        @default(PATIENT)
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime
+  officeId               String
+  addresses              addresses[]
+  anamneses              anamneses[]
+  budgets                budgets[]
+  offices                offices     @relation(fields: [officeId], references: [identity], onDelete: Cascade)
+}
+
+model sessions {
+  id         Int      @id @default(autoincrement())
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  timestamps Boolean  @default(true)
+  userId     Int
+  users      users    @relation(fields: [userId], references: [id])
+}
+
+model sessionsAdmin {
+  id          Int        @id @default(autoincrement())
+  expiresAt   DateTime
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime
+  timestamps  Boolean    @default(true)
+  userAdminId Int
+  usersAdmin  usersAdmin @relation(fields: [userAdminId], references: [id])
+}
+
+model teeths {
+  id       Int     @id @default(autoincrement())
+  name     String
+  position String
+  faces    String
+  option   String
+  value    Int
+  discount Int
+  budgetId Int
+  budgets  budgets @relation(fields: [budgetId], references: [id])
+}
+
+model users {
+  id          Int         @id @default(autoincrement())
+  name        String
+  email       String      @unique
+  password    String
+  tel         String
+  status      Boolean     @default(true)
+  role        Role        @default(USER)
+  officeId    String
+  firstAccess Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime
+  addresses   addresses[]
+  sessions    sessions[]
+  offices     offices     @relation(fields: [officeId], references: [identity])
+}
+
+model usersAdmin {
+  id            Int             @id @default(autoincrement())
+  name          String
+  email         String          @unique
+  password      String
+  status        Boolean         @default(true)
+  role          Role            @default(BACKOFFICE)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime
+  sessionsAdmin sessionsAdmin[]
+}
+
+enum Role {
+  USER
+  ADMIN
+  BACKOFFICE
+  PATIENT
+}
