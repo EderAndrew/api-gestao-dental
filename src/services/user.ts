@@ -1,9 +1,8 @@
-import { users } from "@prisma/client";
 import { prisma } from "../utils/prisma";
 import { User } from "../types/user";
 
 export const findUserByEmail = async (email: string) => {
-  const user = await prisma.users.findFirst({
+  const user = await prisma.user.findFirst({
     where: { email },
   });
 
@@ -13,7 +12,7 @@ export const findUserByEmail = async (email: string) => {
 };
 
 export const postUser = async (data: User) => {
-  const user = await prisma.users.create({
+  const user = await prisma.user.create({
     data: {
       name: data.name,
       email: data.email,
