@@ -7,8 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model addresses {
-  id           Int       @id @default(autoincrement())
+model Address {
+  id           Int      @id @default(autoincrement())
   street       String
   number       String
   complement   String?
@@ -19,13 +19,15 @@ model addresses {
   userId       Int?
   officeId     String?
   patientId    String?
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime @default(now())
   updatedAt    DateTime
-  offices      offices?  @relation(fields: [officeId], references: [identity])
-  patients     patients? @relation(fields: [patientId], references: [identity])
+  offices      Office?  @relation(fields: [officeId], references: [identity])
+  patients     Patient? @relation(fields: [patientId], references: [identity])
+
+  @@map("addresses")
 }
 
-model anamneses {
+model Anamnese {
   id                     Int      @id @default(autoincrement())
   reason                 String
   discomfort_mouth       String
@@ -47,10 +49,12 @@ model anamneses {
   createdAt              DateTime @default(now())
   updatedAt              DateTime
   patientId              Int
-  patients               patients @relation(fields: [patientId], references: [id])
+  patients               Patient  @relation(fields: [patientId], references: [id])
+
+  @@map("anamneses")
 }
 
-model budgets {
+model Budget {
   id               Int      @id @default(autoincrement())
   treatment_type   String
   treatment_date   String
@@ -62,32 +66,49 @@ model budgets {
   createdAt        DateTime @default(now())
   updatedAt        DateTime
   patientId        Int
-  patients         patients @relation(fields: [patientId], references: [id])
-  teeths           teeths[]
+  patients         Patient  @relation(fields: [patientId], references: [id])
+  teeths           Teeth[]
+
+  @@map("budgets")
 }
 
-model offices {
-  id        Int         @id @default(autoincrement())
-  identity  String?     @unique
+model Office {
+  id        Int       @id @default(autoincrement())
+  identity  String?   @unique
   corporate String
   name      String
   tel       String
-  cnpj      String      @unique
-  status    Boolean     @default(true)
-  createdAt DateTime    @default(now())
+  cnpj      String    @unique
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
   updatedAt DateTime
-  addresses addresses[]
-  patients  patients[]
-  users     users[]
+  addresses Address[]
+  patients  Patient[]
+  users     User[]
+  payment   Payment[]
+
+  @@map("offices")
 }
 
-model officesPayment {
-  id Int @id @default(autoincrement())
+model Payment {
+  id             Int         @id @default(autoincrement())
+  payment        String
+  split_payment  String?
+  paymentType    PaymentType @default(DEBIT)
+  payday         DateTime
+  updatedAt      DateTime?
+  createdAt      DateTime?
+  userId         Int
+  officeIdentity String
+  users          User        @relation(fields: [userId], references: [id])
+  offices        Office      @relation(fields: [officeIdentity], references: [identity])
+
+  @@map("payments")
 }
 
-model patients {
-  id                     Int         @id @default(autoincrement())
-  identity               String?     @unique
+model Patient {
+  id                     Int        @id @default(autoincrement())
+  identity               String?    @unique
   name                   String
   email                  String?
   cpf                    String
@@ -105,29 +126,33 @@ model patients {
   agreement_card         String
   holder_name            String?
   cpf_holder             String?
-  status                 Boolean     @default(true)
-  role                   Role        @default(PATIENT)
-  createdAt              DateTime    @default(now())
+  status                 Boolean    @default(true)
+  role                   Role       @default(PATIENT)
+  createdAt              DateTime   @default(now())
   updatedAt              DateTime
   officeId               String
-  addresses              addresses[]
-  anamneses              anamneses[]
-  budgets                budgets[]
-  offices                offices     @relation(fields: [officeId], references: [identity], onDelete: Cascade)
+  addresses              Address[]
+  anamneses              Anamnese[]
+  budgets                Budget[]
+  offices                Office     @relation(fields: [officeId], references: [identity], onDelete: Cascade)
+
+  @@map("patients")
 }
 
-model sessions {
+model Session {
   id         Int      @id @default(autoincrement())
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime
   timestamps Boolean  @default(true)
   userId     Int
-  users      users    @relation(fields: [userId], references: [id])
+  users      User     @relation(fields: [userId], references: [id])
+
+  @@map("sessions")
 }
 
-model teeths {
-  id       Int     @id @default(autoincrement())
+model Teeth {
+  id       Int    @id @default(autoincrement())
   name     String
   position String
   faces    String
@@ -135,23 +160,28 @@ model teeths {
   value    Int
   discount Int
   budgetId Int
-  budgets  budgets @relation(fields: [budgetId], references: [id])
+  budgets  Budget @relation(fields: [budgetId], references: [id])
+
+  @@map("teeths")
 }
 
-model users {
-  id          Int        @id @default(autoincrement())
+model User {
+  id          Int       @id @default(autoincrement())
   name        String
-  email       String     @unique
+  email       String    @unique
   password    String
   tel         String?
-  status      Boolean    @default(true)
-  role        Role       @default(USER)
+  status      Boolean   @default(true)
+  role        Role      @default(USER)
   officeId    String?
-  firstAccess Boolean    @default(true)
+  firstAccess Boolean   @default(true)
   createdAt   DateTime?
   updatedAt   DateTime
-  sessions    sessions[]
-  offices     offices?   @relation(fields: [officeId], references: [identity])
+  sessions    Session[]
+  offices     Office?   @relation(fields: [officeId], references: [identity])
+  payment     Payment[]
+
+  @@map("users")
 }
 
 enum Role {
@@ -159,4 +189,10 @@ enum Role {
   ADMIN
   BACKOFFICE
   PATIENT
+}
+
+enum PaymentType {
+  CREDIT
+  DEBIT
+  MONEY
 }
