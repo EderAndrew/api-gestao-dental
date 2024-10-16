@@ -2,10 +2,14 @@ import { Router } from "express";
 import * as pingController from "../controllers/ping";
 import * as authController from "../controllers/auth";
 import * as userController from "../controllers/user";
+import * as officeController from "../controllers/office";
 
 export const mainRouter = Router();
 
 mainRouter.get("/ping", pingController.ping);
 
 mainRouter.post("/auth/signin", authController.signin);
+
 mainRouter.post("/user/create", userController.createUser);
+
+mainRouter.post("/office/create", officeController.createOffice);

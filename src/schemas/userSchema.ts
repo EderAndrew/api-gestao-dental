@@ -14,8 +14,6 @@ export const userSchema = z.object({
   role: z.enum(ROLE).default("USER"),
   officeId: z.string().optional(),
   firstAccess: z.boolean().optional(),
-  addresses: z.array(z.object({})).optional(),
-  sessions: z.array(z.object({})).optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });

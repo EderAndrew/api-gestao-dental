@@ -8,21 +8,21 @@ datasource db {
 }
 
 model Address {
-  id           Int      @id @default(autoincrement())
-  street       String
-  number       String
-  complement   String?
-  neighborhood String
-  city         String
-  state        String
-  cep          String
-  userId       Int?
-  officeId     String?
-  patientId    String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime
-  offices      Office?  @relation(fields: [officeId], references: [identity])
-  patients     Patient? @relation(fields: [patientId], references: [identity])
+  id         Int      @id @default(autoincrement())
+  street     String
+  number     String
+  complement String?
+  district   String
+  city       String
+  state      String
+  cep        String
+  userId     Int?
+  officeId   String?
+  patientId  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  offices    Office?  @relation(fields: [officeId], references: [identity])
+  patients   Patient? @relation(fields: [patientId], references: [identity])
 
   @@map("addresses")
 }

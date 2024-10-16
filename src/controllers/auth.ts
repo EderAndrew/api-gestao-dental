@@ -27,7 +27,7 @@ export const signin: RequestHandler = async (req, res): Promise<any> => {
 
     const token = createJWT(payload);
 
-    return res.status(200).json({ token, user });
+    return res.status(200).json(user);
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);

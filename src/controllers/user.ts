@@ -27,7 +27,7 @@ export const createUser: RequestHandler = async (req, res): Promise<any> => {
       password: hash,
       tel: safeData.data.tel ? safeData.data.tel : undefined,
       role: safeData.data.role,
-      officeId: safeData.data.officeId,
+      officeId: safeData.data.officeId ? safeData.data.officeId : undefined,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -38,7 +38,7 @@ export const createUser: RequestHandler = async (req, res): Promise<any> => {
     if (!data)
       return res.status(400).json({ message: "Erro ao criar o usuário." });
 
-    return data;
+    return res.status(201).json({ message: "Usuário criado com sucesso." });
   } catch (error) {
     if (error instanceof Error) {
       return res.status(500).json({ message: error.message });
