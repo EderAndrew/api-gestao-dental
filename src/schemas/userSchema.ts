@@ -7,7 +7,8 @@ export const userSchema = z.object({
   email: z.string({ message: "Email é obrigatorio." }).email("Email inválido."),
   password: z
     .string({ message: "Senha é obrigatória." })
-    .min(8, "Precisa ter 4 ou mais caracteres."),
+    .min(8, "Precisa ter 4 ou mais caracteres.")
+    .optional(),
   tel: z.string().optional(),
   status: z.boolean().optional(),
   role: z.enum(ROLE).default("USER"),

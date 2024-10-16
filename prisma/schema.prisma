@@ -23,7 +23,6 @@ model addresses {
   updatedAt    DateTime
   offices      offices?  @relation(fields: [officeId], references: [identity])
   patients     patients? @relation(fields: [patientId], references: [identity])
-  users        users?    @relation(fields: [userId], references: [id])
 }
 
 model anamneses {
@@ -127,16 +126,6 @@ model sessions {
   users      users    @relation(fields: [userId], references: [id])
 }
 
-model sessionsAdmin {
-  id          Int        @id @default(autoincrement())
-  expiresAt   DateTime
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime
-  timestamps  Boolean    @default(true)
-  userAdminId Int
-  usersAdmin  usersAdmin @relation(fields: [userAdminId], references: [id])
-}
-
 model teeths {
   id       Int     @id @default(autoincrement())
   name     String
@@ -150,32 +139,19 @@ model teeths {
 }
 
 model users {
-  id          Int         @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
-  email       String      @unique
+  email       String     @unique
   password    String
   tel         String?
-  status      Boolean     @default(true)
-  role        Role        @default(USER)
-  officeId    String
-  firstAccess Boolean     @default(true)
+  status      Boolean    @default(true)
+  role        Role       @default(USER)
+  officeId    String?
+  firstAccess Boolean    @default(true)
   createdAt   DateTime?
   updatedAt   DateTime
-  addresses   addresses[]
   sessions    sessions[]
-  offices     offices     @relation(fields: [officeId], references: [identity])
-}
-
-model usersAdmin {
-  id            Int             @id @default(autoincrement())
-  name          String
-  email         String          @unique
-  password      String
-  status        Boolean         @default(true)
-  role          Role            @default(BACKOFFICE)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime
-  sessionsAdmin sessionsAdmin[]
+  offices     offices?   @relation(fields: [officeId], references: [identity])
 }
 
 enum Role {

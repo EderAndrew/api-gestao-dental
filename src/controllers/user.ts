@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { userSchema } from "../schemas/userSchema";
 import { findUserByEmail, postUser } from "../services/user";
-import { User } from "../types/user";
+import { hashSync } from "bcrypt-ts";
 
 export const createUser: RequestHandler = async (req, res): Promise<any> => {
   try {
@@ -19,11 +19,12 @@ export const createUser: RequestHandler = async (req, res): Promise<any> => {
     if (haveUser) {
       return res.status(400).json({ message: "Usuário ja existe." });
     }
+    const hash = hashSync(safeData.data.email, 10);
 
     const resp = {
       name: safeData.data.name,
       email: safeData.data.email,
-      password: safeData.data.password,
+      password: hash,
       tel: safeData.data.tel ? safeData.data.tel : undefined,
       role: safeData.data.role,
       officeId: safeData.data.officeId,
