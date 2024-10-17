@@ -30,3 +30,13 @@ export const postUser = async (data: User) => {
 
   return user;
 };
+
+export const findUserById = async (id: number) => {
+  const user = await prisma.user.findFirst({
+    where: { id },
+  });
+
+  if (!user) return null;
+
+  return user;
+};

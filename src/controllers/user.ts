@@ -45,3 +45,8 @@ export const createUser: RequestHandler = async (req, res): Promise<any> => {
     }
   }
 };
+
+export const getUserById: RequestHandler = async (req, res): Promise<any> => {
+  try {
+  } catch (error) {}
+};
