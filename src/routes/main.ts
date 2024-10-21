@@ -24,13 +24,13 @@ mainRouter.get(
 );
 mainRouter.delete("/user/delete/:id", verifyJWT, userController.deleteUser);
 
-mainRouter.post("/office/create", officeController.createOffice);
+mainRouter.post("/office/create", verifyJWT, officeController.createOffice);
 //mainRouter.put("/office/update/:id");
 //mainRouter.get("/office/all");
 //mainRouter.get("/office/:id");
 //mainRouter.delete("/office/delete/:id");
 
-//mainRouter.post("/patients/create")
+mainRouter.post("/patients/create", verifyJWT, patientController.createPatient);
 //mainRouter.pust("/patients/update/:id")
 //mainRouter.get("/patients/office/:officeIdentity/all")
 //mainRouter.get("/patients/office/:officeIdentity/patient/:id")

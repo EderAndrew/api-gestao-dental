@@ -126,6 +126,7 @@ model Patient {
   agreement_card         String
   holder_name            String?
   cpf_holder             String?
+  note                   String?
   status                 Boolean    @default(true)
   role                   Role       @default(PATIENT)
   createdAt              DateTime   @default(now())
