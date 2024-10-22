@@ -3,6 +3,7 @@ import * as pingController from "../controllers/ping";
 import * as authController from "../controllers/auth";
 import * as userController from "../controllers/user";
 import * as officeController from "../controllers/office";
+import * as patientController from "../controllers/patient";
 import { verifyJWT } from "../utils/jwt";
 
 export const mainRouter = Router();

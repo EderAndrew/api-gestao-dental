@@ -112,7 +112,7 @@ model Patient {
   name                   String
   email                  String?
   cpf                    String
-  rg                     String
+  rg                     String?
   birth_date             String
   tel                    String
   career                 String
