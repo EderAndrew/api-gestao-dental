@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
 import { patientSchema } from "../schemas/patientSchema";
 import { findPatientByCPF, newPatient } from "../services/patient";
-import { Patient } from "@prisma/client";
+import { TPatient } from "../types/patient";
+import { TAddress } from "../types/address";
+import { TAnamnese } from "../types/anamnese";
 
 export const createPatient: RequestHandler = async (req, res): Promise<any> => {
   try {
@@ -24,7 +26,7 @@ export const createPatient: RequestHandler = async (req, res): Promise<any> => {
     }
 
     //*Caso não, Cria o paciente
-    const data: Patient = {
+    const data: TPatient = {
       identity: safeData.data.identity ? safeData.data.identity : "",
       name: safeData.data.name,
       email: safeData.data.email ? safeData.data.email : "",
@@ -57,8 +59,8 @@ export const createPatient: RequestHandler = async (req, res): Promise<any> => {
       createdAt: new Date(safeData.data.createdAt as Date),
       updatedAt: new Date(safeData.data.updatedAt as Date),
       officeId: safeData.data.officeId,
-      addresses: safeData.data.addresses ? safeData.data.addresses : undefined,
-      anamnese: safeData.data.anamnese,
+      address: safeData.data.address as TAddress,
+      anamnese: safeData.data.anamnese as TAnamnese,
     };
 
     //*Salva o Paciente

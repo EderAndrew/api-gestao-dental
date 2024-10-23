@@ -1,0 +1,23 @@
+export type TAnamnese = {
+  id?: number;
+  reason: string;
+  discomfort_mouth: string;
+  high_pressure: string;
+  control_pressure: string;
+  oral_hygiene: string;
+  grind_teeth: string;
+  allergy: string;
+  what_allergy: string;
+  drink_smoke: string;
+  frequency: string;
+  bleeding: string;
+  when_bleeding: string;
+  sensitivity: string;
+  prothesis: string;
+  prothesis_type: string;
+  pregnant_breastfeeding?: string;
+  pregnant_time?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  patientId: number;
+};

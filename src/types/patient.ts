@@ -1,0 +1,32 @@
+import { TAddress } from "./address";
+import { TAnamnese } from "./anamnese";
+
+export type TPatient = {
+  id?: number;
+  identity: string;
+  name: string;
+  email?: string;
+  cpf: string;
+  rg?: string;
+  birth_date: string;
+  tel: string;
+  career?: string;
+  gender: string;
+  age: number;
+  responsible_name?: string;
+  responsible_birth_date?: string;
+  contact_name?: string;
+  contact_tel?: string;
+  agreement: string;
+  agreement_card: string;
+  holder_name?: string;
+  cpf_holder?: string;
+  note?: string;
+  status: boolean;
+  role: string;
+  createdAt: Date;
+  updatedAt: Date;
+  officeId: string;
+  address: TAddress;
+  anamnese: TAnamnese;
+};
