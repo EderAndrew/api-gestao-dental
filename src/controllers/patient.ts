@@ -1,9 +1,11 @@
 import { RequestHandler } from "express";
 import { patientSchema } from "../schemas/patientSchema";
-import { findPatientByCPF, newPatient } from "../services/patient";
+import {
+  findPatientByCPF,
+  newPatient,
+  patientsByOfficeId,
+} from "../services/patient";
 import { TPatient } from "../types/patient";
-import { TAddress } from "../types/address";
-import { TAnamnese } from "../types/anamnese";
 
 export const createPatient: RequestHandler = async (req, res): Promise<any> => {
   try {
@@ -98,6 +100,28 @@ export const createPatient: RequestHandler = async (req, res): Promise<any> => {
     return res
       .status(200)
       .json({ message: "Paciente cadastrado com sucesso." });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+  }
+};
+
+export const getPatientsByOfficeId: RequestHandler = async (
+  req,
+  res
+): Promise<any> => {
+  try {
+    const { officeIdentity } = req.params;
+    const patients = await patientsByOfficeId(officeIdentity);
+
+    if (!patients) {
+      return res
+        .status(400)
+        .json({ message: "Não existe nenhum paciente para esse consultório." });
+    }
+
+    return res.status(200).json({ patients });
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);

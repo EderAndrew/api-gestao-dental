@@ -91,3 +91,23 @@ export const newPatient = async (data: TPatient) => {
 
   return patient;
 };
+
+export const patientsByOfficeId = async (officeId: string) => {
+  const patients = await prisma.patient.findMany({
+    take: 10,
+    where: {
+      officeId,
+    },
+    include: {
+      addresses: true,
+      anamneses: true,
+    },
+    orderBy: {
+      id: "asc",
+    },
+  });
+
+  if (!patients) return null;
+
+  return patients;
+};

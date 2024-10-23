@@ -32,6 +32,10 @@ mainRouter.post("/office/create", verifyJWT, officeController.createOffice);
 //mainRouter.delete("/office/delete/:id");
 
 mainRouter.post("/patients/create", verifyJWT, patientController.createPatient);
-//mainRouter.pust("/patients/update/:id")
-//mainRouter.get("/patients/office/:officeIdentity/all")
+//mainRouter.put("/patients/update/:id")
+mainRouter.get(
+  "/patients/office/:officeIdentity/all",
+  verifyJWT,
+  patientController.getPatientsByOfficeId
+);
 //mainRouter.get("/patients/office/:officeIdentity/patient/:id")

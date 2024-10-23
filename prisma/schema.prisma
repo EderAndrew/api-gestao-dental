@@ -48,8 +48,8 @@ model Anamnese {
   pregnant_time          String?
   createdAt              DateTime @default(now())
   updatedAt              DateTime
-  patientId              Int
-  patients               Patient  @relation(fields: [patientId], references: [id])
+  patientId              String
+  patients               Patient  @relation(fields: [patientId], references: [identity])
 
   @@map("anamneses")
 }
@@ -65,8 +65,8 @@ model Budget {
   pay_installments Int
   createdAt        DateTime @default(now())
   updatedAt        DateTime
-  patientId        Int
-  patients         Patient  @relation(fields: [patientId], references: [id])
+  patientId        String
+  patients         Patient  @relation(fields: [patientId], references: [identity])
   teeths           Teeth[]
 
   @@map("budgets")
