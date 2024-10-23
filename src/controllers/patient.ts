@@ -27,7 +27,7 @@ export const createPatient: RequestHandler = async (req, res): Promise<any> => {
 
     //*Caso não, Cria o paciente
     const data: TPatient = {
-      identity: safeData.data.identity ? safeData.data.identity : "",
+      identity: safeData.data!.identity as string,
       name: safeData.data.name,
       email: safeData.data.email ? safeData.data.email : "",
       cpf: safeData.data.cpf,
@@ -56,11 +56,36 @@ export const createPatient: RequestHandler = async (req, res): Promise<any> => {
       note: safeData.data.note ? safeData.data.note : "",
       status: safeData.data.status,
       role: safeData.data.role,
-      createdAt: new Date(safeData.data.createdAt as Date),
-      updatedAt: new Date(safeData.data.updatedAt as Date),
       officeId: safeData.data.officeId,
-      address: safeData.data.address as TAddress,
-      anamnese: safeData.data.anamnese as TAnamnese,
+      address: {
+        street: safeData.data.address?.street as string,
+        number: safeData.data.address?.number as string,
+        complement: safeData.data.address?.complement as string,
+        district: safeData.data.address?.district as string,
+        city: safeData.data.address?.city as string,
+        state: safeData.data.address?.state as string,
+        cep: safeData.data.address?.cep as string,
+      },
+      anamnese: {
+        reason: safeData.data.anamnese?.reason as string,
+        discomfort_mouth: safeData.data.anamnese?.discomfort_mouth as string,
+        high_pressure: safeData.data.anamnese?.high_pressure as string,
+        control_pressure: safeData.data.anamnese?.control_pressure as string,
+        oral_hygiene: safeData.data.anamnese?.oral_hygiene as string,
+        grind_teeth: safeData.data.anamnese?.grind_teeth as string,
+        allergy: safeData.data.anamnese?.allergy as string,
+        what_allergy: safeData.data.anamnese?.what_allergy as string,
+        drink_smoke: safeData.data.anamnese?.drink_smoke as string,
+        frequency: safeData.data.anamnese?.frequency as string,
+        bleeding: safeData.data.anamnese?.bleeding as string,
+        when_bleeding: safeData.data.anamnese?.when_bleeding as string,
+        sensitivity: safeData.data.anamnese?.sensitivity as string,
+        prothesis: safeData.data.anamnese?.prothesis as string,
+        prothesis_type: safeData.data.anamnese?.prothesis_type as string,
+        pregnant_breastfeeding: safeData.data.anamnese
+          ?.pregnant_breastfeeding as string,
+        pregnant_time: safeData.data.anamnese?.pregnant_time as string,
+      },
     };
 
     //*Salva o Paciente
@@ -70,7 +95,9 @@ export const createPatient: RequestHandler = async (req, res): Promise<any> => {
       return res.status(400).json({ message: "Erro ao cadastrar o paciente." });
     }
 
-    return res.status(200).json({ patient });
+    return res
+      .status(200)
+      .json({ message: "Paciente cadastrado com sucesso." });
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);

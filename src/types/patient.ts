@@ -24,8 +24,8 @@ export type TPatient = {
   note?: string;
   status: boolean;
   role: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   officeId: string;
   address: TAddress;
   anamnese: TAnamnese;
